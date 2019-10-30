@@ -1,0 +1,92 @@
+<title>支付页</title>
+
+<link rel="stylesheet" type="text/css" href="/static/home/css/pages-pay.css"/>
+
+<div class="cart py-container">
+    <!--主内容-->
+    <div class="checkout py-container  pay">
+        <div class="checkout-tit">
+            <h4 class="tit-txt"><span class="success-icon"></span><span
+                    class="success-info">订单提交成功，请您及时付款，以便尽快为您发货~~</span></h4>
+            <div class="paymark">
+                <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>{$order.order_sn}</em></span>
+                <span class="fr"><em class="sui-lead">应付金额：</em><em
+                        class="orange money">￥{$order.order_amount}</em></span>
+            </div>
+        </div>
+        <div class="qrpay">
+            <div class="step-tit">
+                <h5>扫码付(支持支付宝、微信)</h5>
+            </div>
+            <div class="step-cont">
+                <img src="{$qr_path}" style="width:200px;height:200px;">
+            </div>
+        </div>
+        <div class="checkout-steps">
+            <!--收件人信息-->
+            <div class="step-tit">
+                <h5>支付平台</h5>
+            </div>
+            <div class="step-cont">
+
+                <ul class="payType">
+                    {foreach $pay_type as $k => $v}
+                    <li pay_type="{$k}" class="{if($k == 'alipay')}selected{/if}"><img src="{$v.logo}"></li>
+                    {/foreach}
+                </ul>
+
+            </div>
+            <div class="hr"></div>
+
+            <div class="submit sui-text-center">
+                <a class="sui-btn btn-danger btn-xlarge" href="javascript:;" target="_blank">立即支付</a>
+            </div>
+            <div class="otherpay">
+                <div class="step-tit">
+                    <h5>其他支付方式</h5>
+                </div>
+                <div class="step-cont">
+                    <span><a href="weixinpay.html" target="_blank">微信支付</a></span>
+                    <span>中国银联</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<form action="{:url('home/order/topay')}" method="post" style="display: none;">
+    <input type="hidden" name="id" value="{$order.id}">
+    <input type="hidden" name="pay_type" value="">
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        $("ul.payType li").click(function () {
+            $('ul.payType li').removeClass('selected');
+            $(this).addClass('selected');
+        });
+
+        $('.submit').click(function () {
+            var pag_type = $('ul.payType li.selected').attr('pay_type');
+            $('input[name=pay_type]').val(pag_type);
+            $('form').submit();
+        });
+
+        //轮询， 查询支付状态
+        var order_sn = "{$order.order_sn}";
+        var timer = setInterval(function () {
+            $.ajax({
+                "url": "{:url('home/order/status')}",
+                "type": "post",
+                "data": "order_sn=" + order_sn,
+                "dataType": "json",
+                "success": function (res) {
+                    if (res.code == 200 && res.data == 1) {
+                        clearInterval(timer);
+                        location.href = "{:url('home/order/payresult')}?order_sn=" + order_sn;
+                    }
+                }
+            });
+        }, 1000);
+    })
+</script>

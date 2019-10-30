@@ -1,0 +1,3 @@
+'api_key' => 'sk_test_qfzL081Gy9qLq1yD844G8OO4',//test_key ªÚ live_key
+
+'app_id' => 'app_00yr98fTan94Dazj',// ”¶”√app_id
