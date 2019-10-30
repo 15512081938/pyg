@@ -1,0 +1,327 @@
+<title>设置-个人信息</title>
+
+<link rel="stylesheet" type="text/css" href="/static/home/css/pages-seckillOrder.css"/>
+<div id="account">
+    <div class="py-container">
+        <div class="yui3-g home">
+            <!--左侧列表-->
+            {include file="layout/member_left"/}
+            <!--右侧主内容-->
+            <div class="yui3-u-5-6">
+                <div class="body userAddress">
+                    <div class="address-title">
+                        <span class="title">地址管理</span>
+                        <a data-toggle="modal" data-target=".add" data-keyboard="false"
+                           class="sui-btn  btn-info add-new">添加新地址</a>
+                        <span class="clearfix"></span>
+                    </div>
+                    <div class="address-detail">
+                        <table class="sui-table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>姓名</th>
+                                <th>地址</th>
+                                <th>联系电话</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach $address as $v}
+                            <tr address-id="{$v.id}" is-default="{$v.is_default}">
+                                <td>{$v.consignee}</td>
+                                <td>{$v.area}&ensp;{$v.address}</td>
+                                <td>{$v.phone}</td>
+                                <td>
+                                    <a data-toggle="modal" data-target=".edit" data-keyboard="false" class="edit_id"
+                                       style="cursor:pointer;">编辑</a>
+                                    <a href="#" class="delete_id">删除</a>
+                                    {if $v.is_default eq 1}<span>默认地址</span>{else/}<a href="#"
+                                                                                      class="isDefault">设为默认</a>{/if}
+                                </td>
+                            </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--新增地址弹出层-->
+                    <div tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade add"
+                         style="width:580px;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×
+                                    </button>
+                                    <h4 id="myModalLabel" class="modal-title">新增地址</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="" class="sui-form form-horizontal">
+                                        <div class="control-group">
+                                            <label class="control-label">收货人：</label>
+                                            <div class="controls">
+                                                <input type="text" class="input-medium" name="consignee">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">所在地区：</label>
+                                            <div class="controls">
+                                                <div data-toggle="distpicker">
+                                                    <div class="form-group area">
+                                                        <select class="form-control" id="province1"
+                                                                name="area0"></select>
+                                                    </div>
+                                                    <div class="form-group area">
+                                                        <select class="form-control" id="city1" name="area1"></select>
+                                                    </div>
+                                                    <div class="form-group area">
+                                                        <select class="form-control" id="district1"
+                                                                name="area2"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">详细地址：</label>
+                                            <div class="controls">
+                                                <input type="text" class="input-large" name="address">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">联系电话：</label>
+                                            <div class="controls">
+                                                <input type="text" class="input-medium" name="phone">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" data-ok="modal" class="sui-btn btn-primary btn-large btn-add">
+                                        确定
+                                    </button>
+                                    <button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large">
+                                        取消
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--修改地址弹出层-->
+                    <div tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade edit"
+                         style="width:580px;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×
+                                    </button>
+                                    <h4 id="myModalLabelEdit" class="modal-title">修改地址</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="" class="sui-form form-horizontal">
+                                        <div class="control-group">
+                                            <input type="hidden" name="id" value="">
+
+                                            <label class="control-label">收货人：</label>
+                                            <div class="controls">
+                                                <input type="text" class="input-medium" name="consignee2">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">所在地区：</label>
+                                            <div class="controls">
+                                                <div id="distpicker2">
+                                                    <div class="form-group area">
+                                                        <select class="form-control" id="province2"
+                                                                name="area0"></select>
+                                                    </div>
+                                                    <div class="form-group area">
+                                                        <select class="form-control" id="city2" name="area1"></select>
+                                                    </div>
+                                                    <div class="form-group area">
+                                                        <select class="form-control" id="district2"
+                                                                name="area2"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">详细地址：</label>
+                                            <div class="controls">
+                                                <input type="text" class="input-large" name="address2">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label">联系电话：</label>
+                                            <div class="controls">
+                                                <input type="text" class="input-medium" name="phone2">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" data-ok="modal"
+                                            class="sui-btn btn-primary btn-large btn-editdata">确定
+                                    </button>
+                                    <button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large">
+                                        取消
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="/static/home/js/plugins/citypicker/distpicker.data.js"></script>
+<script type="text/javascript" src="/static/home/js/plugins/citypicker/distpicker.js"></script>
+<script type="text/javascript" src="/static/home/js/pages/main.js"></script>
+
+<script>
+    $(function () {
+        var id = 0;
+        var is_id = $("tr[is-default='1']").attr('address-id');
+        $('.delete_id').click(function () {
+            id = $(this).closest('tr').attr('address-id');
+            var flag = confirm("是否删除？");
+            if (!flag) return false;
+            var that = this;
+            $.ajax({
+                "url": "{:url('home/user/delete')}",
+                "type": "get",
+                "data": {"id": id},
+                "dataType": "json",
+                "success": function (res) {
+                    if (res.code != 200) {
+                        alert(res.msg);
+                        return;
+                    }
+//                    location.href="{:url('home/user/address')}";
+                    $(that).closest('tr').remove();
+                }
+            });
+        });
+        $('tbody').on('click', '.isDefault', function () {
+            id = $(this).closest('tr').attr('address-id');
+            var flag = confirm("是否设置为默认？");
+            if (!flag) return false;
+            $.ajax({
+                "url": "{:url('home/user/isDefault')}",
+                "type": "get",
+                "data": {"id": id},
+                "dataType": "json",
+                "success": function (res) {
+                    if (res.code != 200) {
+                        alert(res.msg);
+                        return;
+                    }
+                    $('tr[address-id=' + id + ']').find('td:eq(3)').find('a:last-child').remove();
+                    $('tr[address-id=' + id + ']').find('td:eq(3):last-child').append(`<span>默认地址</span>`);
+                    $('tr[address-id=' + is_id + ']').find('td:eq(3)').find('span').remove();
+                    $('tr[address-id=' + is_id + ']').find('td:eq(3):last-child').append(`<a href="#" class="isDefault">设为默认</a>`);
+                    is_id = id;
+//                    location.href="{:url('home/user/address')}";
+                }
+            });
+        });
+        $('.edit_id').click(function () {
+            id = $(this).closest('tr').attr('address-id');
+            $(".edit").find("input[name='id']").val(id);
+            $.ajax({
+                "url": "{:url('home/user/getEditAdd')}",
+                "type": "get",
+                "data": {"id": id},
+                "dataType": "json",
+                "success": function (res) {
+                    if (res.code != 200) {
+                        alert(res.msg);
+                        return;
+                    }
+//                    console.log(res.data);
+                    var arr = res.data.area.trim().split('-');
+//                    console.log(arr);
+                    $('#distpicker2').distpicker('destroy').distpicker({
+                        province: arr[0],
+                        city: arr[1],
+                        district: arr[2]
+                    });
+                    $("input[name='phone2']").val(res.data.phone);
+                    $("input[name='consignee2']").val(res.data.consignee);
+                    $("input[name='address2']").val(res.data.address);
+                }
+            });
+        });
+        $('.btn-editdata').click(function () {
+            var area = $('.area #province2').find('option:selected').html() + '-' + $('.area #city2').find('option:selected').html() + '-' + $('.area #district2').find('option:selected').html();
+            var obj = {
+                'id': id,
+                'phone': $("input[name='phone2']").val(),
+                'consignee': $("input[name='consignee2']").val(),
+                'address': $("input[name='address2']").val(),
+                'area': area,
+                'is_default': 0,
+                'province': $('.area #province2').find('option:selected').attr('data-code'),
+                'city': $('.area #city2').find('option:selected').attr('data-code'),
+                'district': $('.area #district2').find('option:selected').attr('data-code')
+            };
+            $.ajax({
+                "url": "{:url('home/user/editAddress')}",
+                "type": "put",
+                "data": obj,
+                "dataType": "json",
+                "success": function (res) {
+                    if (res.code != 200) {
+                        alert(res.msg);
+                        return;
+                    }
+                    console.log(res.data);
+                    alert('地址修改成功！');
+//                    location.href="{:url('home/user/address')}";
+                    $('tr[address-id=' + id + ']').find('td:eq(0)').html(res.data.consignee);
+                    $('tr[address-id=' + id + ']').find('td:eq(1)').html(res.data.area + " " + res.data.address);
+                    $('tr[address-id=' + id + ']').find('td:eq(2)').html(res.data.phone);
+                }
+            });
+        });
+        $('.btn-add').click(function () {
+            var area = $('.area #province1').find('option:selected').html() + '-' + $('.area #city1').find('option:selected').html() + '-' + $('.area #district1').find('option:selected').html();
+            var obj = {
+                'phone': $("input[name='phone']").val(),
+                'consignee': $("input[name='consignee']").val(),
+                'address': $("input[name='address']").val(),
+                'area': area,
+                'province': $('.area #province1').find('option:selected').attr('data-code'),
+                'city': $('.area #city1').find('option:selected').attr('data-code'),
+                'district': $('.area #district1').find('option:selected').attr('data-code'),
+                'is_default': 0
+            };
+            $.ajax({
+                "url": "{:url('home/user/addAddress')}",
+                "type": "post",
+                "data": obj,
+                "dataType": "json",
+                "success": function (res) {
+                    if (res.code != 200) {
+                        alert(res.msg);
+                        return;
+                    }
+                    alert('地址添加成功！');
+//                    location.href="{:url('home/user/address')}";
+                    var dataHtml = `<tr address-id="{$v.id}">
+                                <td>{$v.consignee}</td>
+                                <td>{$v.area}&ensp;{$v.address}</td>
+                                <td>{$v.phone}</td>
+                                <td>
+                                    <a data-toggle="modal" data-target=".edit" data-keyboard="false" class="edit_id">编辑</a>
+                                    <a href="#" class="delete_id">删除</a>
+                                    {if $v.is_default eq 1}默认地址{else/}<a href="#">设为默认</a>{/if}
+                                </td>
+                            </tr>`;
+                    $('tbody').append(dataHtml);
+                }
+            });
+        })
+    })
+</script>
