@@ -6,6 +6,7 @@ use app\common\model\OpenUser;
 use app\common\model\User;
 use app\home\logic\LoginLogic;
 use think\Controller;
+use think\Cache;
 
 class Login extends Controller
 {
@@ -94,12 +95,20 @@ class Login extends Controller
             $this->error($validate);
         }
         $params['password'] = encrypt_password($params['password']);
-
         $find = User::where(function ($qurey) use ($params) {
             $qurey->where('phone', $params['username'])->whereOr('email', $params['username']);
         })->where('password', $params['password'])->find();
+
+        $redis = new \Redis();
+        $redis->connect('39.106.71.134', 6379, 100);
+        $redis->auth('root');
+        $logincount = $redis->get($params['username']) ?: 1;
+        $lastcount = 5 - $logincount;
+
         //$query为了执行where语句，use将参数引入进来
-        if ($find) {
+        if ($logincount >= 5) {
+            $this->error('您登录太久了，用户已被锁定1分钟，请稍后再试！');
+        } elseif ($find) {
             //登录成功
             session('user_info', $find->toArray());
             //迁移cookie购物车到数据表中*****************************************
@@ -122,7 +131,8 @@ class Login extends Controller
             $this->redirect($back_url);
 
         } else {
-            $this->error('用户名或者密码错误');
+            $redis->setex($params['username'], 60, $logincount + 1);
+            $this->error("尊敬的{$params['username']}用户，您输入的用户名或者密码错误，您已登录{$logincount}次，还剩余{$lastcount}次");
         }
     }
 
